@@ -6,13 +6,13 @@ WORKDIR /stuff
 COPY package.json .
 COPY package-lock.json .
 
-RUN git clone https://github.com/poanetwork/poa-bridge-contracts.git
+RUN git clone https://github.com/ColuLocalNetwork/poa-bridge-contracts.git
 
 RUN mkdir submodules && \
   mv poa-bridge-contracts submodules && \
   cd submodules/poa-bridge-contracts && \
   git fetch && \
-  git checkout new-feature-many2manyERC20
+  git checkout fix-deploy-script
 
 RUN npm install --unsafe-perm
 
