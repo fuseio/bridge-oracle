@@ -92,6 +92,20 @@
     "type": "function"
   },
   {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_dailyLimit",
+        "type": "uint256"
+      }
+    ],
+    "name": "setExecutionDailyLimit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "constant": true,
     "inputs": [],
     "name": "getCurrentDay",
@@ -109,6 +123,39 @@
     "constant": true,
     "inputs": [],
     "name": "requiredBlockConfirmations",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "executionDailyLimit",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_day",
+        "type": "uint256"
+      }
+    ],
+    "name": "totalExecutedPerDay",
     "outputs": [
       {
         "name": "",
@@ -153,12 +200,59 @@
   },
   {
     "constant": true,
+    "inputs": [
+      {
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withinExecutionLimit",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "executionMaxPerTx",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
     "inputs": [],
     "name": "requiredSignatures",
     "outputs": [
       {
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
       }
     ],
     "payable": false,
@@ -191,6 +285,28 @@
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getBridgeInterfacesVersion",
+    "outputs": [
+      {
+        "name": "major",
+        "type": "uint64"
+      },
+      {
+        "name": "minor",
+        "type": "uint64"
+      },
+      {
+        "name": "patch",
+        "type": "uint64"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -293,6 +409,20 @@
   {
     "constant": true,
     "inputs": [],
+    "name": "upgradeabilityAdmin",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
     "name": "minPerTx",
     "outputs": [
       {
@@ -321,6 +451,34 @@
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_maxPerTx",
+        "type": "uint256"
+      }
+    ],
+    "name": "setExecutionMaxPerTx",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -427,6 +585,35 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "newLimit",
+        "type": "uint256"
+      }
+    ],
+    "name": "ExecutionDailyLimitChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "EternalOwnershipTransferred",
+    "type": "event"
+  },
+  {
     "constant": false,
     "inputs": [
       {
@@ -456,6 +643,18 @@
       {
         "name": "_requiredBlockConfirmations",
         "type": "uint256"
+      },
+      {
+        "name": "_homeDailyLimit",
+        "type": "uint256"
+      },
+      {
+        "name": "_homeMaxPerTx",
+        "type": "uint256"
+      },
+      {
+        "name": "_owner",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -467,6 +666,20 @@
     ],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getBridgeMode",
+    "outputs": [
+      {
+        "name": "_data",
+        "type": "bytes4"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
     "type": "function"
   },
   {

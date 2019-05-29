@@ -93,8 +93,11 @@ async function addBridgeMapping(
   const homeNonce = await web3Home.eth.getTransactionCount(DEPLOYMENT_ACCOUNT_ADDRESS)
   console.log('\n[Home] Add bridge mapping')
   const mapper = new web3Home.eth.Contract(BridgeMapperABI, HOME_BRIDGE_MAPPER_ADDRESS)
+
+  const key = '0x0000000000000000000000000000000000000000000000000000000000000001'
   const addBridgeMappingData = await mapper.methods
     .addBridgeMapping(
+      key,
       foreignToken,
       homeToken,
       foreignBridge,
