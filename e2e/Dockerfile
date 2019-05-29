@@ -10,9 +10,7 @@ RUN git clone https://github.com/ColuLocalNetwork/poa-bridge-contracts.git
 
 RUN mkdir submodules && \
   mv poa-bridge-contracts submodules && \
-  cd submodules/poa-bridge-contracts && \
-  git fetch && \
-  git checkout fix-deploy-script
+  cd submodules/poa-bridge-contracts
 
 RUN npm install --unsafe-perm
 
