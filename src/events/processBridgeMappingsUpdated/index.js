@@ -13,6 +13,7 @@ function processBridgeMappingsUpdatedBuilder(config) {
     const jobs = bridgesMappings.map(bridge =>
       limit(async () => {
         const {
+          key,
           homeBridge,
           foreignBridge,
           homeToken,
@@ -27,6 +28,7 @@ function processBridgeMappingsUpdatedBuilder(config) {
 
         logger.info(
           {
+            key,
             homeBridge,
             foreignBridge,
             homeToken,
@@ -42,7 +44,7 @@ function processBridgeMappingsUpdatedBuilder(config) {
         } else {
           return redis.hset(
             config.deployedBridgesRedisKey,
-            foreignToken,
+            key,
             JSON.stringify({
               homeBridge,
               foreignBridge,
