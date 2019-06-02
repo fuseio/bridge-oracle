@@ -83,6 +83,7 @@ async function deployHomeBridge(suffix) {
 }
 
 async function addBridgeMapping(
+  key,
   foreignToken,
   homeToken,
   foreignBridge,
@@ -94,7 +95,6 @@ async function addBridgeMapping(
   console.log('\n[Home] Add bridge mapping')
   const mapper = new web3Home.eth.Contract(BridgeMapperABI, HOME_BRIDGE_MAPPER_ADDRESS)
 
-  const key = '0x0000000000000000000000000000000000000000000000000000000000000001'
   const addBridgeMappingData = await mapper.methods
     .addBridgeMapping(
       key,
@@ -125,13 +125,14 @@ async function addBridgeMapping(
   console.log('\n[Home] bridge mapping updated: ', JSON.stringify(bridgeMapping))
 }
 
-async function addBridgeForToken(index) {
+async function addBridgeForToken(index, key) {
   const token = process.env[`ERC20_TOKEN_ADDRESS_${index}`]
   const { foreignBridgeAddress, foreignBridgeBlockNumber } = await deployForeignBridge(token)
   const { homeBridgeAddress, homeBridgeToken, homeBridgeBlockNumber } = await deployHomeBridge(
     index
   )
   await addBridgeMapping(
+    key,
     token,
     homeBridgeToken,
     foreignBridgeAddress,
@@ -143,8 +144,12 @@ async function addBridgeForToken(index) {
 
 async function deploy() {
   try {
-    await addBridgeForToken('1')
-    await addBridgeForToken('2')
+    await addBridgeForToken('1', '0x0000000000000000000000000000000000000000000000000000000000000001')
+    await addBridgeForToken('2', '0x0000000000000000000000000000000000000000000000000000000000000002')
+
+    // deploy another bridge for the first token
+    await addBridgeForToken('1', '0x0000000000000000000000000000000000000000000000000000000000000003')
+
   } catch (e) {
     console.log(e)
   }
