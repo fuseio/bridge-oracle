@@ -125,7 +125,7 @@ async function processOne(
   lastProcessedBlock
 ) {
   logger.debug(
-    `processOne --> bridgeContractAddress: ${bridgeContractAddress}, eventContractAddress: ${eventContractAddress}, homeBridgeAddress: ${homeBridgeAddress}, foreignBridgeAddress: ${foreignBridgeAddress}, eventFilter: ${eventFilter}, lastProcessedBlock: ${lastProcessedBlock}`
+    `processOne --> bridgeContractAddress: ${bridgeContractAddress}, eventContractAddress: ${eventContractAddress}, homeBridgeAddress: ${homeBridgeAddress}, foreignBridgeAddress: ${foreignBridgeAddress}, eventFilter: ${JSON.stringify(eventFilter)}, lastProcessedBlock: ${lastProcessedBlock}`
   )
 
   const bridgeContract = new web3Instance.eth.Contract(config.bridgeAbi, bridgeContractAddress)
