@@ -24,6 +24,7 @@ const processCollectedSignatures = require('./events/processCollectedSignatures'
 const processAffirmationRequests = require('./events/processAffirmationRequests')(config)
 const processTransfers = require('./events/processTransfers')(config)
 const processBridgeMappingsUpdated = require('./events/processBridgeMappingsUpdated')(config)
+const processRewardedOnCycle = require('./events/processRewardedOnCycle')(config)
 
 const ZERO = toBN(0)
 const ONE = toBN(1)
@@ -99,6 +100,8 @@ function processEvents(events, homeBridgeAddress, foreignBridgeAddress) {
     case 'erc-erc-multiple-affirmation-request':
     case 'erc-native-affirmation-request':
       return processTransfers(events, homeBridgeAddress)
+    case 'native-erc-rewarded-on-cycle':
+      return processRewardedOnCycle(events, homeBridgeAddress, foreignBridgeAddress)
     default:
       return []
   }
