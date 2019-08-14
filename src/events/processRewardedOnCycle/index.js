@@ -1,24 +1,26 @@
 require('dotenv').config()
+const promiseLimit = require('promise-limit')
+const { HttpListProviderError } = require('http-list-provider')
+const bridgeValidatorsABI = require('../../../abis/BridgeValidators.abi')
 const rootLogger = require('../../services/logger')
 const { web3Home } = require('../../services/web3')
-const promiseLimit = require('promise-limit')
-const bridgeValidatorsABI = require('../../../abis/BridgeValidators.abi')
-const { EXIT_CODES, MAX_CONCURRENT_EVENTS } = require('../../utils/constants')
+const { createMessage } = require('../../utils/message')
 const estimateGas = require('./estimateGas')
 const {
   AlreadyProcessedError,
   AlreadySignedError,
   InvalidValidatorError
 } = require('../../utils/errors')
-const { HttpListProviderError } = require('http-list-provider')
+const { EXIT_CODES, MAX_CONCURRENT_EVENTS } = require('../../utils/constants')
+
+const { VALIDATOR_ADDRESS_PRIVATE_KEY } = process.env
 
 const limit = promiseLimit(MAX_CONCURRENT_EVENTS)
 
+let expectedMessageLength = null
 let validatorContract = null
 
 function processRewardedOnCycleBuilder(config) {
-  const homeBridge = new web3Home.eth.Contract(config.homeBridgeAbi, config.homeBridgeAddress)
-
   return async function processRewardedOnCycle(
     rewardedOnCycleEvents,
     homeBridgeAddress,
@@ -39,10 +41,10 @@ function processRewardedOnCycleBuilder(config) {
       validatorContract = new web3Home.eth.Contract(bridgeValidatorsABI, validatorContractAddress)
     }
 
-    rootLogger.debug(`Processing ${rewardedOnCycleEvents.length} SignatureRequest events`)
+    rootLogger.debug(`Processing ${rewardedOnCycleEvents.length} RewardedOnCycle events`)
     const callbacks = rewardedOnCycleEvents.map(rewardedOnCycle =>
       limit(async () => {
-        const { value } = rewardedOnCycle.returnValues
+        const value = rewardedOnCycle.returnValues.amount
 
         const logger = rootLogger.child({
           eventTransactionHash: rewardedOnCycle.transactionHash
@@ -54,8 +56,8 @@ function processRewardedOnCycleBuilder(config) {
         )
 
         const message = createMessage({
-          foreignBridgeAddress, // we will mint the tokens and lock them on foreign bridge
-          value,
+          recipient: foreignBridgeAddress, // we will mint the tokens and lock them on foreign bridge
+          value: value,
           transactionHash: rewardedOnCycle.transactionHash,
           bridgeAddress: foreignBridgeAddress,
           expectedMessageLength
