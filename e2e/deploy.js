@@ -2,7 +2,7 @@ const path = require('path')
 const shell = require('shelljs')
 
 const envsDir = path.join(__dirname, 'envs')
-const deployContractsDir = path.join(__dirname, 'submodules/poa-bridge-contracts/deploy')
+const deployContractsDir = path.join(__dirname, 'submodules/bridge-contracts/deploy')
 const scriptDir = path.join(__dirname, 'scripts')
 
 // NATIVE_TO_ERC

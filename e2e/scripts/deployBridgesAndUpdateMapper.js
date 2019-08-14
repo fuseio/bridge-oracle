@@ -1,21 +1,21 @@
 /* eslint import/no-unresolved: 0  node/no-missing-require: 0 */
 const path = require('path')
 require('dotenv').config({
-  path: path.join(__dirname, '../submodules/poa-bridge-contracts/deploy/.env')
+  path: path.join(__dirname, '../submodules/bridge-contracts/deploy/.env')
 })
 
-const { sendRawTx } = require('../submodules/poa-bridge-contracts/deploy/src/deploymentUtils')
+const { sendRawTx } = require('../submodules/bridge-contracts/deploy/src/deploymentUtils')
 const {
   web3Foreign,
   web3Home,
   deploymentPrivateKey
-} = require('../submodules/poa-bridge-contracts/deploy/src/web3')
+} = require('../submodules/bridge-contracts/deploy/src/web3')
 
-const ForeignBridgeFactoryABI = require('../submodules/poa-bridge-contracts/build/contracts/ForeignBridgeFactory.json')
+const ForeignBridgeFactoryABI = require('../submodules/bridge-contracts/build/contracts/ForeignBridgeFactory.json')
   .abi
-const HomeBridgeFactoryABI = require('../submodules/poa-bridge-contracts/build/contracts/HomeBridgeFactory.json')
+const HomeBridgeFactoryABI = require('../submodules/bridge-contracts/build/contracts/HomeBridgeFactory.json')
   .abi
-const BridgeMapperABI = require('../submodules/poa-bridge-contracts/build/contracts/BridgeMapper.json')
+const BridgeMapperABI = require('../submodules/bridge-contracts/build/contracts/BridgeMapper.json')
   .abi
 
 const {
