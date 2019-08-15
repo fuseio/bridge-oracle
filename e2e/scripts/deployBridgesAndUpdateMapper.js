@@ -103,7 +103,8 @@ async function addBridgeMapping(
       foreignBridge,
       homeBridge,
       foreignBlockNumber,
-      homeBlockNumber
+      homeBlockNumber,
+      '0x0000000000000000000000000000000000000000'
     )
     .encodeABI({ from: DEPLOYMENT_ACCOUNT_ADDRESS })
   await sendRawTx({

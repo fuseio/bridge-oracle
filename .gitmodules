@@ -1,3 +1,0 @@
-[submodule "submodules/bridge-contracts"]
-	path = submodules/bridge-contracts
-	url = https://github.com/fuseio/bridge-contracts.git

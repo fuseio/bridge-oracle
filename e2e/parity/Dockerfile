@@ -1,4 +1,4 @@
-FROM parity/parity:v2.3.3
+FROM parity/parity:v2.4.5
 
 WORKDIR /stuff
 
