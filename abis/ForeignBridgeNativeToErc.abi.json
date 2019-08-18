@@ -655,6 +655,10 @@
       {
         "name": "_owner",
         "type": "address"
+      },
+      {
+        "name": "_erc677tokenPreMinted",
+        "type": "bool"
       }
     ],
     "name": "initialize",
