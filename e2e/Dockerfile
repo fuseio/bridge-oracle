@@ -12,7 +12,7 @@ RUN mkdir submodules && \
   mv bridge-contracts submodules && \
   cd submodules/bridge-contracts && \
   git fetch && \
-  git checkout block-rewards-home-to-foreign-mint
+  git checkout master
 
 RUN npm install --unsafe-perm
 
