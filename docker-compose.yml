@@ -10,6 +10,7 @@ services:
       - net_rabbit_bridge_request
       - net_rabbit_bridge_collected
       - net_rabbit_bridge_affirmation
+      - net_rabbit_bridge_initiate_change
       - net_rabbit_bridge_rewarded_on_cycle
       - net_rabbit_bridge_deployed
       - net_rabbit_bridge_senderhome
@@ -26,6 +27,7 @@ services:
       - net_db_bridge_request
       - net_db_bridge_collected
       - net_db_bridge_affirmation
+      - net_db_bridge_initiate_change
       - net_db_bridge_rewarded_on_cycle
       - net_db_bridge_deployed
       - net_db_bridge_senderhome
@@ -74,6 +76,20 @@ services:
     networks:
       - net_db_bridge_affirmation
       - net_rabbit_bridge_affirmation
+  bridge_initiate_change:
+    cpus: 0.1
+    mem_limit: 500m
+    build: .
+    command: 'true'
+    env_file: ./.env
+    environment:
+      - NODE_ENV=production
+      - VALIDATOR_ADDRESS=${VALIDATOR_ADDRESS}
+    restart: unless-stopped
+    entrypoint: npm run watcher:initiate-change
+    networks:
+      - net_db_bridge_initiate_change
+      - net_rabbit_bridge_initiate_change
   bridge_rewarded_on_cycle:
     cpus: 0.1
     mem_limit: 500m
@@ -138,6 +154,8 @@ networks:
     driver: bridge
   net_db_bridge_affirmation:
     driver: bridge
+  net_db_bridge_initiate_change:
+    driver: bridge
   net_db_bridge_rewarded_on_cycle:
     driver: bridge
   net_db_bridge_deployed:
@@ -151,6 +169,8 @@ networks:
   net_rabbit_bridge_collected:
     driver: bridge
   net_rabbit_bridge_affirmation:
+    driver: bridge
+  net_rabbit_bridge_initiate_change:
     driver: bridge
   net_rabbit_bridge_rewarded_on_cycle:
     driver: bridge

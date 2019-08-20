@@ -33,6 +33,26 @@ function createMessage({
   return message
 }
 
+function createNewSetMessage({
+  newSet,
+  transactionHash,
+  bridgeAddress
+}) {
+  for(let i = 0; i < newSet.length; i++) {
+    newSet[i] = strip0x(newSet[i])
+    assert.equal(newSet[i].length, 20 * 2)
+  }
+
+  transactionHash = strip0x(transactionHash)
+  assert.equal(transactionHash.length, 32 * 2)
+
+  bridgeAddress = strip0x(bridgeAddress)
+  assert.equal(bridgeAddress.length, 20 * 2)
+
+  const message = `0x${transactionHash}${bridgeAddress}${newSet.join('')}`
+  return message
+}
+
 function parseMessage(message) {
   message = strip0x(message)
 
@@ -74,6 +94,7 @@ function signatureToVRS(signature) {
 
 module.exports = {
   createMessage,
+  createNewSetMessage,
   parseMessage,
   signatureToVRS
 }
