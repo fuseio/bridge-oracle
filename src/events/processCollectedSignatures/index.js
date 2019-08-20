@@ -61,6 +61,7 @@ function processCollectedSignaturesBuilder(config) {
         ) {
           logger.info(`Processing CollectedSignatures ${colSignature.transactionHash}`)
           const message = await homeBridge.methods.message(messageHash).call()
+          const expectedMessageLength = await homeBridge.methods.requiredMessageLength().call()
 
           const requiredSignatures = []
           requiredSignatures.length = NumberOfCollectedSignatures
@@ -79,19 +80,22 @@ function processCollectedSignaturesBuilder(config) {
 
           await Promise.all(signaturePromises)
 
-          let gasEstimate
+          let gasEstimate, methodName
           try {
             logger.debug('Estimate gas')
-            gasEstimate = await estimateGas({
+            result = await estimateGas({
               foreignBridge,
               validatorContract,
               v,
               r,
               s,
               message,
-              numberOfCollectedSignatures: NumberOfCollectedSignatures
+              numberOfCollectedSignatures: NumberOfCollectedSignatures,
+              expectedMessageLength
             })
-            logger.debug({ gasEstimate }, 'Gas estimated')
+            logger.info({ result }, 'Gas estimated')
+            gasEstimate = result.gasEstimate
+            methodName = result.methodName
           } catch (e) {
             if (e instanceof HttpListProviderError) {
               throw new Error(
@@ -111,7 +115,7 @@ function processCollectedSignaturesBuilder(config) {
               throw e
             }
           }
-          const data = await foreignBridge.methods.executeSignatures(v, r, s, message).encodeABI()
+          const data = await foreignBridge.methods[methodName](v, r, s, message).encodeABI()
           txToSend.push({
             data,
             gasEstimate,

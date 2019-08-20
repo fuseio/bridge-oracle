@@ -83,6 +83,35 @@ function parseMessage(message) {
   }
 }
 
+function parseNewSetMessage(message) {
+  message = strip0x(message)
+
+  const txHashStart = 0
+  const txHashLength = 32 * 2
+  const txHash = `0x${message.slice(txHashStart, txHashStart + txHashLength)}`
+
+  const contractAddressStart = txHashStart + txHashLength
+  const contractAddressLength = 40
+  const contractAddress = `0x${message.slice(
+    contractAddressStart,
+    contractAddressStart + contractAddressLength
+  )}`
+
+  let newSetItemStart = contractAddressStart + contractAddressLength
+  let newSetItemLength = 40
+  let newSet = []
+  while (newSetItemStart + newSetItemLength <= message.length) {
+    newSet.push(`0x${message.slice(newSetItemStart, newSetItemStart + newSetItemLength)}`)
+    newSetItemStart += newSetItemLength
+  }
+
+  return {
+    newSet,
+    txHash,
+    contractAddress
+  }
+}
+
 function signatureToVRS(signature) {
   assert.equal(signature.length, 2 + 32 * 2 + 32 * 2 + 2)
   signature = strip0x(signature)
@@ -96,5 +125,6 @@ module.exports = {
   createMessage,
   createNewSetMessage,
   parseMessage,
+  parseNewSetMessage,
   signatureToVRS
 }

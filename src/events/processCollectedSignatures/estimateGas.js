@@ -5,7 +5,7 @@ const {
   IncompatibleContractError,
   InvalidValidatorError
 } = require('../../utils/errors')
-const { parseMessage } = require('../../utils/message')
+const { parseMessage, parseNewSetMessage } = require('../../utils/message')
 const logger = require('../../services/logger').child({
   module: 'processCollectedSignatures:estimateGas'
 })
@@ -20,13 +20,26 @@ async function estimateGas({
   numberOfCollectedSignatures,
   v,
   r,
-  s
+  s,
+  expectedMessageLength
 }) {
   try {
-    const gasEstimate = await foreignBridge.methods
-      .executeSignatures(v, r, s, message)
-      .estimateGas()
-    return gasEstimate
+    let gasEstimate, methodName
+    if (message.length != expectedMessageLength) {
+      gasEstimate = await foreignBridge.methods
+        .executeSignatures(v, r, s, message)
+        .estimateGas()
+      methodName = 'executeNewSetSignatures'
+    } else {
+      gasEstimate = await foreignBridge.methods
+        .executeNewSetSignatures(v, r, s, message)
+        .estimateGas()
+      methodName = 'executeSignatures'
+    }
+    return {
+      gasEstimate,
+      methodName
+    }
   } catch (e) {
     if (e instanceof HttpListProviderError) {
       throw e
@@ -34,8 +47,15 @@ async function estimateGas({
 
     // check if the message was already processed
     logger.debug('Check if the message was already processed')
-    const { txHash } = parseMessage(message)
-    const alreadyProcessed = await foreignBridge.methods.relayedMessages(txHash).call()
+    let parsedMsg = parseMessage(message)
+    let alreadyProcessed = await foreignBridge.methods.relayedMessages(parsedMsg.txHash).call()
+    if (alreadyProcessed) {
+      throw new AlreadyProcessedError()
+    }
+
+    logger.debug('Check if the message was already processed')
+    parsedMsg = parseNewSetMessage(message)
+    alreadyProcessed = await foreignBridge.methods.relayedMessages(parsedMsg.txHash).call()
     if (alreadyProcessed) {
       throw new AlreadyProcessedError()
     }

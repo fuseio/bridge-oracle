@@ -1,6 +1,6 @@
 const { BN, toBN } = require('web3').utils
 const { expect } = require('chai').use(require('bn-chai')(BN))
-const { createMessage, parseMessage, signatureToVRS } = require('../src/utils/message')
+const { createMessage, createNewSetMessage, parseMessage, parseNewSetMessage, signatureToVRS } = require('../src/utils/message')
 
 describe('message utils', () => {
   const expectedMessageLength = 104
@@ -227,13 +227,185 @@ describe('message utils', () => {
       expect(messageThunk).to.throw()
     })
   })
+  describe('createNewSetMessage', () => {
+    it('should create a message when receiving valid values', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+      const bridgeAddress = '0xfA79875FB0828c1FBD438583ED23fF5a956D80a1'
+
+      // when
+      const message = createNewSetMessage({
+        newSet,
+        transactionHash,
+        bridgeAddress
+      })
+
+      // then
+      expect(message).to.equal(
+        [
+          '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a',
+          'fA79875FB0828c1FBD438583ED23fF5a956D80a1',
+          'F3a4C2862188781365966A040B1f47b9614b2DC78359c8278cD5626Ef9fbA0CD091fA6FA4334372E'
+        ].join('')
+      )
+    })
+
+    it('should work if the some addresses in the new set array are not prefixed with 0x', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+      const bridgeAddress = '0xfA79875FB0828c1FBD438583ED23fF5a956D80a1'
+
+      // when
+      const message = createNewSetMessage({
+        newSet,
+        transactionHash,
+        bridgeAddress
+      })
+
+      // then
+      expect(message).to.equal(
+        [
+          '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a',
+          'fA79875FB0828c1FBD438583ED23fF5a956D80a1',
+          'F3a4C2862188781365966A040B1f47b9614b2DC78359c8278cD5626Ef9fbA0CD091fA6FA4334372E'
+        ].join('')
+      )
+    })
+
+    it('should work if the transaction hash is not prefixed with 0x', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+      const bridgeAddress = '0xfA79875FB0828c1FBD438583ED23fF5a956D80a1'
+
+      // when
+      const message = createNewSetMessage({
+        newSet,
+        transactionHash,
+        bridgeAddress
+      })
+
+      // then
+      expect(message).to.equal(
+        [
+          '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a',
+          'fA79875FB0828c1FBD438583ED23fF5a956D80a1',
+          'F3a4C2862188781365966A040B1f47b9614b2DC78359c8278cD5626Ef9fbA0CD091fA6FA4334372E'
+        ].join('')
+      )
+    })
+
+    it('should work if the bridge address hash is not prefixed with 0x', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+      const bridgeAddress = 'fA79875FB0828c1FBD438583ED23fF5a956D80a1'
+
+      // when
+      const message = createNewSetMessage({
+        newSet,
+        transactionHash,
+        bridgeAddress
+      })
+
+      // then
+      expect(message).to.equal(
+        [
+          '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a',
+          'fA79875FB0828c1FBD438583ED23fF5a956D80a1',
+          'F3a4C2862188781365966A040B1f47b9614b2DC78359c8278cD5626Ef9fbA0CD091fA6FA4334372E'
+        ].join('')
+      )
+    })
+
+    it('should fail if some addresses in the new set array are too short', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+
+      // when
+      const messageThunk = () =>
+        createNewSetMessage({ newSet, transactionHash, expectedMessageLength })
+
+      // then
+      expect(messageThunk).to.throw()
+    })
+
+    it('should fail if some addresses in the new set array are too long', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372EE']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+
+      // when
+      const messageThunk = () =>
+        createNewSetMessage({ newSet, transactionHash, expectedMessageLength })
+
+      // then
+      expect(messageThunk).to.throw()
+    })
+
+    it('should fail if the transaction hash is too short', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5'
+
+      // when
+      const messageThunk = () =>
+        createNewSetMessage({ newSet, transactionHash, expectedMessageLength })
+
+      // then
+      expect(messageThunk).to.throw()
+    })
+
+    it('should fail if the transaction hash is too long', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5aa'
+
+      // when
+      const messageThunk = () =>
+        createNewSetMessage({ newSet, transactionHash, expectedMessageLength })
+
+      // then
+      expect(messageThunk).to.throw()
+    })
+
+    it('should fail if the bridge address is too short', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+      const bridgeAddress = '0xfA79875FB0828c1FBD438583ED23fF5a956D80a'
+
+      // when
+      const messageThunk = () =>
+        createNewSetMessage({ newSet, transactionHash, bridgeAddress, expectedMessageLength })
+
+      // then
+      expect(messageThunk).to.throw()
+    })
+
+    it('should fail if the bridge address is too long', () => {
+      // given
+      const newSet = ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E']
+      const transactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+      const bridgeAddress = '0xfA79875FB0828c1FBD438583ED23fF5a956D80a11'
+
+      // when
+      const messageThunk = () =>
+        createNewSetMessage({ newSet, transactionHash, bridgeAddress, expectedMessageLength })
+
+      // then
+      expect(messageThunk).to.throw()
+    })
+  })
   describe('parseMessage', () => {
     it('should return the same values that were used to create the message', () => {
       // given
       const originalRecipient = '0xe3D952Ad4B96A756D65790393128FA359a7CD888'
       const originalValue = '0x2a'
-      const originalTransactionHash =
-        '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+      const originalTransactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
       const originalBridgeAddress = '0xfA79875FB0828c1FBD438583ED23fF5a956D80a1'
 
       // when
@@ -249,6 +421,27 @@ describe('message utils', () => {
       // then
       expect(recipient).to.equal(originalRecipient)
       expect(toBN(amount)).to.eq.BN(toBN(originalValue))
+      expect(txHash).to.equal(originalTransactionHash)
+      expect(contractAddress).to.equal(originalBridgeAddress)
+    })
+  })
+  describe('parseNewSetMessage', () => {
+    it('should return the same values that were used to create the message', () => {
+      // given
+      const originalTransactionHash = '0x4a298455c1ccb17de77718fc045a876e1b4e063afaad361dcdef142a8ee48d5a'
+      const originalBridgeAddress = '0xfA79875FB0828c1FBD438583ED23fF5a956D80a1'
+
+      // when
+      const message = createNewSetMessage({
+        newSet: ['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E'],
+        transactionHash: originalTransactionHash,
+        bridgeAddress: originalBridgeAddress
+      })
+
+      const { newSet, txHash, contractAddress } = parseNewSetMessage(message)
+
+      // then
+      expect(newSet).to.deep.equal(['0xF3a4C2862188781365966A040B1f47b9614b2DC7', '0x8359c8278cD5626Ef9fbA0CD091fA6FA4334372E'])
       expect(txHash).to.equal(originalTransactionHash)
       expect(contractAddress).to.equal(originalBridgeAddress)
     })
