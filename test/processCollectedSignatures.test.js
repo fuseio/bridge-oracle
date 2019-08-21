@@ -23,7 +23,7 @@ describe('processCollectedSignatures', () => {
       }
 
       // when
-      const { gasEstimate } = await estimateGas({ web3, foreignBridge, validatorContract: address, message: randomMessage() })
+      const { gasEstimate } = await estimateGas({ web3, foreignBridge })
 
       // then
       expect(gasEstimate).to.equal(1000)
@@ -40,7 +40,7 @@ describe('processCollectedSignatures', () => {
       }
 
       // when
-      const result = estimateGas({ web3, foreignBridge, validatorContract: address, message: randomMessage() })
+      const result = estimateGas({ web3, foreignBridge })
 
       // then
       await expect(result).to.be.rejectedWith(HttpListProviderError)

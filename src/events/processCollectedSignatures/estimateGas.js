@@ -25,7 +25,7 @@ async function estimateGas({
 }) {
   try {
     let gasEstimate, methodName
-    if (message.length != expectedMessageLength) {
+    if (message && message.length != expectedMessageLength) {
       gasEstimate = await foreignBridge.methods
         .executeNewSetSignatures(v, r, s, message)
         .estimateGas()
@@ -78,6 +78,7 @@ async function estimateGas({
       }
     }
 
+    logger.error('Unrecognized error', e)
     throw new Error('Unknown error while processing message')
   }
 }

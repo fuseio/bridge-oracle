@@ -46,7 +46,7 @@ async function estimateGas({ web3, homeBridge, validatorContract, signature, mes
       throw new InvalidValidatorError(`${address} is not a validator`)
     }
 
-    logger.error('Unrecognized error')
+    logger.error('Unrecognized error', e)
     throw new Error('Unknown error while processing message')
   }
 }
