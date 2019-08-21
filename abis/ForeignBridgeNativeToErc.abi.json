@@ -33,32 +33,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "vs",
-        "type": "uint8[]"
-      },
-      {
-        "name": "rs",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "ss",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "message",
-        "type": "bytes"
-      }
-    ],
-    "name": "executeSignatures",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [
       {
@@ -229,32 +203,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "vs",
-        "type": "uint8[]"
-      },
-      {
-        "name": "rs",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "ss",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "message",
-        "type": "bytes"
-      }
-    ],
-    "name": "executeNewSetSignatures",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -557,6 +505,18 @@
     "inputs": [
       {
         "indexed": false,
+        "name": "transactionHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "RelayedNewSetMessage",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "name": "recipient",
         "type": "address"
       },
@@ -572,18 +532,6 @@
       }
     ],
     "name": "RelayedMessage",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "transactionHash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "RelayedNewSetMessage",
     "type": "event"
   },
   {
@@ -737,6 +685,58 @@
       }
     ],
     "name": "claimTokensFromErc677",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "vs",
+        "type": "uint8[]"
+      },
+      {
+        "name": "rs",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "ss",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "message",
+        "type": "bytes"
+      }
+    ],
+    "name": "executeSignatures",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "vs",
+        "type": "uint8[]"
+      },
+      {
+        "name": "rs",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "ss",
+        "type": "bytes32[]"
+      },
+      {
+        "name": "message",
+        "type": "bytes"
+      }
+    ],
+    "name": "executeNewSetSignatures",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
