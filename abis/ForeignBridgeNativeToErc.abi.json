@@ -579,11 +579,6 @@
     "inputs": [
       {
         "indexed": false,
-        "name": "newSet",
-        "type": "address[]"
-      },
-      {
-        "indexed": false,
         "name": "transactionHash",
         "type": "bytes32"
       }
