@@ -78,7 +78,7 @@ async function estimateGas({
       }
     }
 
-    logger.error('Unrecognized error', e)
+    logger.error('Unrecognized error')
     throw new Error('Unknown error while processing message')
   }
 }
