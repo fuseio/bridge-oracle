@@ -1,16 +1,36 @@
 FROM node:10
 
-RUN apt-get update
-RUN apt-get install -y build-essential
-RUN apt-get install -y libc6-dev
-RUN apt-get install -y libc6-dev-i386
-RUN apt-get install -y wget
-RUN apt-get clean
+ENV NODE_ENV=production
 
-WORKDIR /bridge
-COPY package.json .
-COPY package-lock.json .
-RUN npm install
+ENV BRIDGE_MODE=NATIVE_TO_ERC
+
+ENV ALLOW_HTTP=no
+
+ENV HOME_POLLING_INTERVAL=5000
+ENV FOREIGN_POLLING_INTERVAL=5000
+
+ENV CONSENSUS_ADDRESS=0x3014ca10b91cb3D0AD85fEf7A3Cb95BCAc9c0f79
+ENV BLOCK_REWARD_ADDRESS=0x63D4efeD2e3dA070247bea3073BCaB896dFF6C9B
+
+ENV HOME_GAS_PRICE_ORACLE_URL=https://gasprice.poa.network/
+ENV HOME_GAS_PRICE_SPEED_TYPE=standard
+ENV HOME_GAS_PRICE_FALLBACK=1000000000
+ENV HOME_GAS_PRICE_UPDATE_INTERVAL=600000
+
+ENV FOREIGN_GAS_PRICE_ORACLE_URL=https://gasprice.poa.network/
+ENV FOREIGN_GAS_PRICE_SPEED_TYPE=standard
+ENV FOREIGN_GAS_PRICE_FALLBACK=1000000000
+ENV FOREIGN_GAS_PRICE_UPDATE_INTERVAL=600000
+
+ENV QUEUE_URL=amqp://rabbit
+ENV REDIS_URL=redis://redis
+
+ENV REDIS_LOCK_TTL=1000
+
+ENV LOG_LEVEL=info
+ENV MAX_PROCESSING_TIME=20000
+
 COPY . .
-CMD echo "To start a bridge process run:" \
-  "VALIDATOR_ADDRESS=<validator address> VALIDATOR_ADDRESS_PRIVATE_KEY=<validator address private key> docker-compose up -d --build"
+RUN npm install
+
+CMD npm run $NPM_SCRIPT
