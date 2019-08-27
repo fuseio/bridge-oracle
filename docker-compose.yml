@@ -6,6 +6,7 @@ services:
     environment: ['RABBITMQ_NODENAME=node@rabbit']
     hostname: rabbit
     image: rabbitmq:3
+    container_name: fuseoracle-rabbitmq
     networks:
       - net_rabbit_bridge_request
       - net_rabbit_bridge_collected
@@ -23,6 +24,7 @@ services:
     command: [redis-server, --appendonly, 'yes']
     hostname: redis
     image: redis:4
+    container_name: fuseoracle-redis
     networks:
       - net_db_bridge_request
       - net_db_bridge_collected
@@ -38,6 +40,7 @@ services:
     cpus: 0.1
     mem_limit: 500m
     image: fusenet/oracle
+    container_name: fuseoracle-signature-request
     env_file: ./.env
     environment:
       - NPM_SCRIPT=watcher:signature-request
@@ -49,6 +52,7 @@ services:
     cpus: 0.1
     mem_limit: 500m
     image: fusenet/oracle
+    container_name: fuseoracle-collected-signatures
     env_file: ./.env
     environment:
       - NPM_SCRIPT=watcher:collected-signatures
@@ -60,6 +64,7 @@ services:
     cpus: 0.1
     mem_limit: 500m
     image: fusenet/oracle
+    container_name: fuseoracle-affirmation-request
     env_file: ./.env
     environment:
       - NPM_SCRIPT=watcher:affirmation-request
@@ -70,14 +75,12 @@ services:
   bridge_initiate_change:
     cpus: 0.1
     mem_limit: 500m
-    build: .
-    command: 'true'
+    image: fusenet/oracle
+    container_name: fuseoracle-initiate-change
     env_file: ./.env
     environment:
-      - NODE_ENV=production
-      - VALIDATOR_ADDRESS=${VALIDATOR_ADDRESS}
+      - NPM_SCRIPT=watcher:initiate-change
     restart: unless-stopped
-    entrypoint: npm run watcher:initiate-change
     networks:
       - net_db_bridge_initiate_change
       - net_rabbit_bridge_initiate_change
@@ -85,6 +88,7 @@ services:
     cpus: 0.1
     mem_limit: 500m
     image: fusenet/oracle
+    container_name: fuseoracle-rewarded-on-cycle
     env_file: ./.env
     environment:
       - NPM_SCRIPT=watcher:rewarded-on-cycle
@@ -96,6 +100,7 @@ services:
     cpus: 0.1
     mem_limit: 500m
     image: fusenet/oracle
+    container_name: fuseoracle-bridge-deployed
     env_file: ./.env
     environment:
       - NPM_SCRIPT=watcher:bridge-deployed
@@ -107,6 +112,7 @@ services:
     cpus: 0.1
     mem_limit: 500m
     image: fusenet/oracle
+    container_name: fuseoracle-sender-home
     env_file: ./.env
     environment:
       - NPM_SCRIPT=sender:home
@@ -118,6 +124,7 @@ services:
     cpus: 0.1
     mem_limit: 500m
     image: fusenet/oracle
+    container_name: fuseoracle-sender-foreign
     env_file: ./.env
     environment:
       - NPM_SCRIPT=sender:foreign
