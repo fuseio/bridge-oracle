@@ -2,6 +2,7 @@ require('dotenv').config()
 const promiseLimit = require('promise-limit')
 const { HttpListProviderError } = require('http-list-provider')
 const bridgeValidatorsABI = require('../../../abis/BridgeValidators.abi')
+const foreignBridgeValidatorsABI = require('../../../abis/ForeignBridgeValidators.abi')
 const rootLogger = require('../../services/logger')
 const { web3Home, web3Foreign } = require('../../services/web3')
 const { signatureToVRS } = require('../../utils/message')
@@ -38,7 +39,7 @@ function processCollectedSignaturesBuilder(config) {
       rootLogger.debug({ validatorContractAddress }, 'Validator contract address obtained')
 
       validatorContract = new web3Foreign.eth.Contract(
-        bridgeValidatorsABI,
+        config.id === 'native-erc' ? foreignBridgeValidatorsABI : bridgeValidatorsABI,
         validatorContractAddress
       )
     }
@@ -61,6 +62,7 @@ function processCollectedSignaturesBuilder(config) {
         ) {
           logger.info(`Processing CollectedSignatures ${colSignature.transactionHash}`)
           const message = await homeBridge.methods.message(messageHash).call()
+          const expectedMessageLength = await homeBridge.methods.requiredMessageLength().call()
 
           const requiredSignatures = []
           requiredSignatures.length = NumberOfCollectedSignatures
@@ -79,19 +81,22 @@ function processCollectedSignaturesBuilder(config) {
 
           await Promise.all(signaturePromises)
 
-          let gasEstimate
+          let gasEstimate, methodName
           try {
             logger.debug('Estimate gas')
-            gasEstimate = await estimateGas({
+            result = await estimateGas({
               foreignBridge,
               validatorContract,
               v,
               r,
               s,
               message,
-              numberOfCollectedSignatures: NumberOfCollectedSignatures
+              numberOfCollectedSignatures: NumberOfCollectedSignatures,
+              expectedMessageLength
             })
-            logger.debug({ gasEstimate }, 'Gas estimated')
+            logger.info({ result }, 'Gas estimated')
+            gasEstimate = result.gasEstimate
+            methodName = result.methodName
           } catch (e) {
             if (e instanceof HttpListProviderError) {
               throw new Error(
@@ -111,7 +116,7 @@ function processCollectedSignaturesBuilder(config) {
               throw e
             }
           }
-          const data = await foreignBridge.methods.executeSignatures(v, r, s, message).encodeABI()
+          const data = await foreignBridge.methods[methodName](v, r, s, message).encodeABI()
           txToSend.push({
             data,
             gasEstimate,

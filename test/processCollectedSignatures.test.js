@@ -23,7 +23,7 @@ describe('processCollectedSignatures', () => {
       }
 
       // when
-      const gasEstimate = await estimateGas({ web3, foreignBridge })
+      const { gasEstimate } = await estimateGas({ web3, foreignBridge })
 
       // then
       expect(gasEstimate).to.equal(1000)

@@ -5,12 +5,12 @@ const {
   InvalidValidatorError
 } = require('../../utils/errors')
 const logger = require('../../services/logger').child({
-  module: 'processSignatureRequests:estimateGas'
+  module: 'processInitiateChange:estimateGas'
 })
 
 async function estimateGas({ web3, homeBridge, validatorContract, signature, message, address }) {
   try {
-    const gasEstimate = await homeBridge.methods.submitSignature(signature, message).estimateGas({
+    const gasEstimate = await homeBridge.methods.submitSignatureOfMessageWithUnknownLength(signature, message).estimateGas({
       from: address
     })
     return gasEstimate

@@ -25,6 +25,7 @@ const processAffirmationRequests = require('./events/processAffirmationRequests'
 const processTransfers = require('./events/processTransfers')(config)
 const processBridgeMappingsUpdated = require('./events/processBridgeMappingsUpdated')(config)
 const processRewardedOnCycle = require('./events/processRewardedOnCycle')(config)
+const processInitiateChange = require('./events/processInitiateChange')(config)
 
 const ZERO = toBN(0)
 const ONE = toBN(1)
@@ -102,6 +103,8 @@ function processEvents(events, homeBridgeAddress, foreignBridgeAddress) {
       return processTransfers(events, homeBridgeAddress)
     case 'native-erc-rewarded-on-cycle':
       return processRewardedOnCycle(events, homeBridgeAddress, foreignBridgeAddress)
+    case 'native-erc-initiate-change':
+      return processInitiateChange(events, homeBridgeAddress, foreignBridgeAddress)
     default:
       return []
   }

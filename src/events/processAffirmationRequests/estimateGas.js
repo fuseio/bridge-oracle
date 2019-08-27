@@ -60,6 +60,7 @@ async function estimateGas({
       throw new InvalidValidatorError(`${address} is not a validator`)
     }
 
+    logger.error(e)
     throw new Error('Unknown error while processing message')
   }
 }

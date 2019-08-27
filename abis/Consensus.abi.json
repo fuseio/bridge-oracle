@@ -1,17 +1,12 @@
 [
   {
     "constant": true,
-    "inputs": [
-      {
-        "name": "_txHash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "relayedMessages",
+    "inputs": [],
+    "name": "getLastSnapshotTakenAtBlock",
     "outputs": [
       {
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "payable": false,
@@ -22,11 +17,109 @@
     "constant": true,
     "inputs": [
       {
-        "name": "_day",
+        "name": "_p",
         "type": "uint256"
       }
     ],
-    "name": "totalSpentPerDay",
+    "name": "pendingValidatorsAtPosition",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_snapshotId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getSnapshotAddresses",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_newAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setProxyStorage",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "name": "_validator",
+        "type": "address"
+      }
+    ],
+    "name": "delegatedAmount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "pendingValidatorsLength",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "newValidatorSetLength",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "DECIMALS",
     "outputs": [
       {
         "name": "",
@@ -52,23 +145,9 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_dailyLimit",
-        "type": "uint256"
-      }
-    ],
-    "name": "setExecutionDailyLimit",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
-    "name": "getCurrentDay",
+    "name": "currentValidatorsLength",
     "outputs": [
       {
         "name": "",
@@ -82,21 +161,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "requiredBlockConfirmations",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "executionDailyLimit",
+    "name": "getMinStake",
     "outputs": [
       {
         "name": "",
@@ -111,15 +176,15 @@
     "constant": true,
     "inputs": [
       {
-        "name": "_day",
+        "name": "_p",
         "type": "uint256"
       }
     ],
-    "name": "totalExecutedPerDay",
+    "name": "currentValidatorsAtPosition",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "payable": false,
@@ -129,30 +194,11 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "dailyLimit",
+    "name": "newValidatorSet",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "_amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "withinExecutionLimit",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
+        "type": "address[]"
       }
     ],
     "payable": false,
@@ -162,7 +208,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "executionMaxPerTx",
+    "name": "getSnapshotsPerCycle",
     "outputs": [
       {
         "name": "",
@@ -190,11 +236,11 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "owner",
+    "name": "isFinalized",
     "outputs": [
       {
         "name": "",
-        "type": "address"
+        "type": "bool"
       }
     ],
     "payable": false,
@@ -204,21 +250,7 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "validatorContract",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "deployedAtBlock",
+    "name": "getCurrentCycleStartBlock",
     "outputs": [
       {
         "name": "",
@@ -232,117 +264,232 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "getBridgeInterfacesVersion",
+    "name": "currentValidators",
     "outputs": [
       {
-        "name": "major",
-        "type": "uint64"
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getCycleDurationBlocks",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "pendingValidators",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getCurrentCycleEndBlock",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "stakeAmount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getNextSnapshotId",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getProxyStorage",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "shouldEmitInitiateChange",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "isValidator",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "isPendingValidator",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "fallback"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "newSet",
+        "type": "address[]"
+      }
+    ],
+    "name": "ChangeFinalized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "ShouldEmitInitiateChange",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "parentHash",
+        "type": "bytes32"
       },
       {
-        "name": "minor",
-        "type": "uint64"
+        "indexed": false,
+        "name": "newSet",
+        "type": "address[]"
+      }
+    ],
+    "name": "InitiateChange",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_minStake",
+        "type": "uint256"
       },
       {
-        "name": "patch",
-        "type": "uint64"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_minPerTx",
+        "name": "_cycleDurationBlocks",
         "type": "uint256"
-      }
-    ],
-    "name": "setMinPerTx",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
+      },
       {
-        "name": "_blockConfirmations",
+        "name": "_snapshotsPerCycle",
         "type": "uint256"
-      }
-    ],
-    "name": "setRequiredBlockConfirmations",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
+      },
       {
-        "name": "_dailyLimit",
-        "type": "uint256"
-      }
-    ],
-    "name": "setDailyLimit",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_gasPrice",
-        "type": "uint256"
-      }
-    ],
-    "name": "setGasPrice",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_maxPerTx",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMaxPerTx",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "upgradeabilityAdmin",
-    "outputs": [
-      {
-        "name": "",
+        "name": "_initialValidator",
         "type": "address"
       }
     ],
+    "name": "initialize",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": true,
     "inputs": [],
-    "name": "minPerTx",
+    "name": "getValidators",
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "address[]"
       }
     ],
     "payable": false,
@@ -350,33 +497,46 @@
     "type": "function"
   },
   {
-    "constant": true,
+    "constant": false,
+    "inputs": [],
+    "name": "finalizeChange",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "stake",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_validator",
+        "type": "address"
+      }
+    ],
+    "name": "delegate",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
     "inputs": [
       {
         "name": "_amount",
         "type": "uint256"
       }
     ],
-    "name": "withinLimit",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_maxPerTx",
-        "type": "uint256"
-      }
-    ],
-    "name": "setExecutionMaxPerTx",
+    "name": "withdraw",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -386,245 +546,33 @@
     "constant": false,
     "inputs": [
       {
-        "name": "newOwner",
+        "name": "_validator",
         "type": "address"
+      },
+      {
+        "name": "_amount",
+        "type": "uint256"
       }
     ],
-    "name": "transferOwnership",
+    "name": "withdraw",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "maxPerTx",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "gasPrice",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "recipient",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "name": "transactionHash",
-        "type": "bytes32"
-      }
-    ],
-    "name": "RelayedMessage",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "gasPrice",
-        "type": "uint256"
-      }
-    ],
-    "name": "GasPriceChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "requiredBlockConfirmations",
-        "type": "uint256"
-      }
-    ],
-    "name": "RequiredBlockConfirmationChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "newLimit",
-        "type": "uint256"
-      }
-    ],
-    "name": "DailyLimitChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "newLimit",
-        "type": "uint256"
-      }
-    ],
-    "name": "ExecutionDailyLimitChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "EternalOwnershipTransferred",
-    "type": "event"
-  },
-  {
     "constant": false,
-    "inputs": [
-      {
-        "name": "_validatorContract",
-        "type": "address"
-      },
-      {
-        "name": "_erc20token",
-        "type": "address"
-      },
-      {
-        "name": "_requiredBlockConfirmations",
-        "type": "uint256"
-      },
-      {
-        "name": "_gasPrice",
-        "type": "uint256"
-      },
-      {
-        "name": "_maxPerTx",
-        "type": "uint256"
-      },
-      {
-        "name": "_homeDailyLimit",
-        "type": "uint256"
-      },
-      {
-        "name": "_homeMaxPerTx",
-        "type": "uint256"
-      },
-      {
-        "name": "_owner",
-        "type": "address"
-      }
-    ],
-    "name": "initialize",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
     "inputs": [],
-    "name": "getBridgeMode",
-    "outputs": [
-      {
-        "name": "_data",
-        "type": "bytes4"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_token",
-        "type": "address"
-      },
-      {
-        "name": "_to",
-        "type": "address"
-      }
-    ],
-    "name": "claimTokens",
+    "name": "cycle",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [],
-    "name": "erc20token",
-    "outputs": [
-      {
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": false,
-    "inputs": [
-      {
-        "name": "vs",
-        "type": "uint8[]"
-      },
-      {
-        "name": "rs",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "ss",
-        "type": "bytes32[]"
-      },
-      {
-        "name": "message",
-        "type": "bytes"
-      }
-    ],
-    "name": "executeSignatures",
+    "inputs": [],
+    "name": "emitInitiateChange",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",

@@ -33,6 +33,26 @@ function createMessage({
   return message
 }
 
+function createNewSetMessage({
+  newSet,
+  transactionHash,
+  bridgeAddress
+}) {
+  for(let i = 0; i < newSet.length; i++) {
+    newSet[i] = strip0x(newSet[i])
+    assert.equal(newSet[i].length, 20 * 2)
+  }
+
+  transactionHash = strip0x(transactionHash)
+  assert.equal(transactionHash.length, 32 * 2)
+
+  bridgeAddress = strip0x(bridgeAddress)
+  assert.equal(bridgeAddress.length, 20 * 2)
+
+  const message = `0x${transactionHash}${bridgeAddress}${newSet.join('')}`
+  return message
+}
+
 function parseMessage(message) {
   message = strip0x(message)
 
@@ -63,6 +83,35 @@ function parseMessage(message) {
   }
 }
 
+function parseNewSetMessage(message) {
+  message = strip0x(message)
+
+  const txHashStart = 0
+  const txHashLength = 32 * 2
+  const txHash = `0x${message.slice(txHashStart, txHashStart + txHashLength)}`
+
+  const contractAddressStart = txHashStart + txHashLength
+  const contractAddressLength = 40
+  const contractAddress = `0x${message.slice(
+    contractAddressStart,
+    contractAddressStart + contractAddressLength
+  )}`
+
+  let newSetItemStart = contractAddressStart + contractAddressLength
+  let newSetItemLength = 40
+  let newSet = []
+  while (newSetItemStart + newSetItemLength <= message.length) {
+    newSet.push(`0x${message.slice(newSetItemStart, newSetItemStart + newSetItemLength)}`)
+    newSetItemStart += newSetItemLength
+  }
+
+  return {
+    newSet,
+    txHash,
+    contractAddress
+  }
+}
+
 function signatureToVRS(signature) {
   assert.equal(signature.length, 2 + 32 * 2 + 32 * 2 + 2)
   signature = strip0x(signature)
@@ -74,6 +123,8 @@ function signatureToVRS(signature) {
 
 module.exports = {
   createMessage,
+  createNewSetMessage,
   parseMessage,
+  parseNewSetMessage,
   signatureToVRS
 }
