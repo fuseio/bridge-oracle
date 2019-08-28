@@ -65,7 +65,6 @@ if (String(process.env.MAX_PROCESSING_TIME) === '0') {
 if (!VALIDATOR_ADDRESS_PRIVATE_KEY) {
   process.env.VALIDATOR_ADDRESS_PRIVATE_KEY = keystoreToPrivateKey(VALIDATOR_KEYSTORE_DIR, VALIDATOR_KEYSTORE_PASSWORD)
 }
-console.log(process.env.VALIDATOR_ADDRESS_PRIVATE_KEY)
 
 const bridgeConfigBasic = {
   homeBridgeAbi: homeAbi,
