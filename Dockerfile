@@ -30,6 +30,8 @@ ENV REDIS_LOCK_TTL=1000
 ENV LOG_LEVEL=info
 ENV MAX_PROCESSING_TIME=20000
 
+WORKDIR /bridge-oracle
+
 COPY . .
 RUN npm install
 
