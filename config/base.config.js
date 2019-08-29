@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const { toBN } = require('web3').utils
 const { web3Home, web3Foreign } = require('../src/services/web3')
-const { privateKeyToAddress } = require('../src/utils/utils')
+const { privateKeyToAddress, keystoreToPrivateKey } = require('../src/utils/utils')
 
 const homeNativeErcAbi = require('../abis/HomeBridgeNativeToErc.abi')
 const foreignNativeErcAbi = require('../abis/ForeignBridgeNativeToErc.abi')
@@ -15,7 +15,7 @@ const foreignErcNativeAbi = require('../abis/ForeignBridgeErcToNative.abi')
 
 const bridgeMapperAbi = require('../abis/BridgeMapper.abi')
 
-const { VALIDATOR_ADDRESS, VALIDATOR_ADDRESS_PRIVATE_KEY } = process.env
+const { VALIDATOR_ADDRESS, VALIDATOR_ADDRESS_PRIVATE_KEY, VALIDATOR_KEYSTORE_DIR, VALIDATOR_KEYSTORE_PASSWORD } = process.env
 
 let homeAbi
 let foreignAbi
@@ -60,6 +60,10 @@ if (String(process.env.MAX_PROCESSING_TIME) === '0') {
     4 * Math.max(process.env.HOME_POLLING_INTERVAL, process.env.FOREIGN_POLLING_INTERVAL)
 } else {
   maxProcessingTime = Number(process.env.MAX_PROCESSING_TIME)
+}
+
+if (!VALIDATOR_ADDRESS_PRIVATE_KEY) {
+  process.env.VALIDATOR_ADDRESS_PRIVATE_KEY = keystoreToPrivateKey(VALIDATOR_KEYSTORE_DIR, VALIDATOR_KEYSTORE_PASSWORD)
 }
 
 const bridgeConfigBasic = {

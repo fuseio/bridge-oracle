@@ -1,7 +1,11 @@
+const fs = require('fs')
+const path = require('path')
+const cwd = process.cwd()
 const BigNumber = require('bignumber.js')
 const promiseLimit = require('promise-limit')
 const promiseRetry = require('promise-retry')
 const Web3 = require('web3')
+const EthWallet = require('ethereumjs-wallet')
 
 async function syncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -97,6 +101,18 @@ function privateKeyToAddress(privateKey) {
     : null
 }
 
+function keystoreToPrivateKey(keystoreDir, keystorePass) {
+  let keystore
+  fs.readdirSync(keystoreDir).forEach(file => {
+    if (file.startsWith('UTC')) {
+      keystore = fs.readFileSync(path.join(keystoreDir, file)).toString()
+    }
+  })
+  let password = keystorePass.toString().trim()
+  let wallet = EthWallet.fromV3(keystore, password)
+  return wallet.getPrivateKeyString()
+}
+
 async function processConcurrently(array, f, concurrency) {
   const limit = promiseLimit(concurrency)
   const promises = await array.map(obj => limit(async () => f(obj)))
@@ -111,5 +127,6 @@ module.exports = {
   setIntervalAndRun,
   watchdog,
   privateKeyToAddress,
+  keystoreToPrivateKey,
   processConcurrently
 }
