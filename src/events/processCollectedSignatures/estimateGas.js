@@ -25,12 +25,14 @@ async function estimateGas({
 }) {
   try {
     let gasEstimate, methodName
-    if (message && message.length != expectedMessageLength) {
+    if (message && message.length != 2 + 2 * expectedMessageLength) { /* see ../../utils/message.js#createMessage */
+      logger.debug('foreignBridge.methods.executeNewSetSignatures')
       gasEstimate = await foreignBridge.methods
         .executeNewSetSignatures(v, r, s, message)
         .estimateGas()
       methodName = 'executeNewSetSignatures'
     } else {
+      logger.debug('foreignBridge.methods.executeSignatures')
       gasEstimate = await foreignBridge.methods
         .executeSignatures(v, r, s, message)
         .estimateGas()
