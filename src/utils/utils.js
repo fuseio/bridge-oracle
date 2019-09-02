@@ -7,6 +7,11 @@ const promiseRetry = require('promise-retry')
 const Web3 = require('web3')
 const EthWallet = require('ethereumjs-wallet')
 
+// strips leading "0x" if present
+function strip0x(input) {
+  return input.replace(/^0x/, '')
+}
+
 async function syncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
     await callback(array[index], index, array)
@@ -110,7 +115,8 @@ function keystoreToPrivateKey(keystoreDir, keystorePass) {
   })
   let password = keystorePass.toString().trim()
   let wallet = EthWallet.fromV3(keystore, password)
-  return wallet.getPrivateKeyString()
+  let pkey = wallet.getPrivateKeyString()
+  return strip0x(pkey)
 }
 
 async function processConcurrently(array, f, concurrency) {
