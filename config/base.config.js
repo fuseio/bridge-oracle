@@ -15,7 +15,7 @@ const foreignErcNativeAbi = require('../abis/ForeignBridgeErcToNative.abi')
 
 const bridgeMapperAbi = require('../abis/BridgeMapper.abi')
 
-const { VALIDATOR_ADDRESS, VALIDATOR_ADDRESS_PRIVATE_KEY, VALIDATOR_KEYSTORE_DIR, VALIDATOR_KEYSTORE_PASSWORD } = process.env
+let { VALIDATOR_ADDRESS, VALIDATOR_ADDRESS_PRIVATE_KEY, VALIDATOR_KEYSTORE_DIR, VALIDATOR_KEYSTORE_PASSWORD } = process.env
 
 let homeAbi
 let foreignAbi
@@ -63,7 +63,8 @@ if (String(process.env.MAX_PROCESSING_TIME) === '0') {
 }
 
 if (!VALIDATOR_ADDRESS_PRIVATE_KEY) {
-  process.env.VALIDATOR_ADDRESS_PRIVATE_KEY = keystoreToPrivateKey(VALIDATOR_KEYSTORE_DIR, VALIDATOR_KEYSTORE_PASSWORD)
+  VALIDATOR_ADDRESS_PRIVATE_KEY = keystoreToPrivateKey(VALIDATOR_KEYSTORE_DIR, VALIDATOR_KEYSTORE_PASSWORD)
+  process.env.VALIDATOR_ADDRESS_PRIVATE_KEY = VALIDATOR_ADDRESS_PRIVATE_KEY
 }
 
 const bridgeConfigBasic = {
