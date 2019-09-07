@@ -50,6 +50,8 @@ async function main() {
           '\n  signature-request' +
           '\n  collected-signatures' +
           '\n  affirmation-request' +
+          '\n  rewarded-on-cycle' +
+          '\n  initiate-change' +
           '\n  bridge-deployed'
       )
     }
