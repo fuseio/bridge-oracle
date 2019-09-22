@@ -6,6 +6,7 @@ const promiseLimit = require('promise-limit')
 const promiseRetry = require('promise-retry')
 const Web3 = require('web3')
 const EthWallet = require('ethereumjs-wallet')
+const _ = require('lodash')
 
 // strips leading "0x" if present
 function strip0x(input) {
@@ -125,6 +126,40 @@ async function processConcurrently(array, f, concurrency) {
   return Promise.all(promises)
 }
 
+function replaceLogsWithEvents(receipt, contract) {
+  if (_.isArray(receipt.logs)) {
+    // decode logs
+    var events = _.map(receipt.logs, function(log) {
+      return contract._decodeEventABI.call({
+          name: 'ALLEVENTS',
+          jsonInterface: contract.options.jsonInterface
+      }, log)
+    })
+    // make log names keys
+    receipt.events = {}
+    var count = 0
+    events.forEach(function (ev) {
+      if (ev.event) {
+        // if > 1 of the same event, don't overwrite any existing events
+        if (receipt.events[ev.event]) {
+          if (Array.isArray(receipt.events[ ev.event ])) {
+              receipt.events[ ev.event ].push(ev)
+          } else {
+              receipt.events[ev.event] = [receipt.events[ev.event], ev]
+          }
+        } else {
+          receipt.events[ ev.event ] = ev
+        }
+      } else {
+        receipt.events[count] = ev
+        count++
+      }
+    })
+    delete receipt.logs
+  }
+  return receipt
+}
+
 module.exports = {
   syncForEach,
   checkHTTPS,
@@ -134,5 +169,6 @@ module.exports = {
   watchdog,
   privateKeyToAddress,
   keystoreToPrivateKey,
-  processConcurrently
+  processConcurrently,
+  replaceLogsWithEvents
 }
