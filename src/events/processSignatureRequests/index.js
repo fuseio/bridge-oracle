@@ -44,19 +44,24 @@ function processSignatureRequestsBuilder(config) {
     rootLogger.debug(`Processing ${signatureRequests.length} SignatureRequest events`)
     const callbacks = signatureRequests.map(signatureRequest =>
       limit(async () => {
-        const { recipient, value } = signatureRequest.returnValues
+        const { recipient, value, data } = signatureRequest.returnValues
 
         const logger = rootLogger.child({
           eventTransactionHash: signatureRequest.transactionHash
         })
 
         logger.info(
-          { sender: recipient, value },
+          { sender: recipient, value, data },
           `Processing signatureRequest ${signatureRequest.transactionHash}`
         )
 
+        let r = recipient
+        if (data && web3Home.utils.isAddress(data)) {
+          r = data
+        }
+
         const message = createMessage({
-          recipient,
+          recipient: r,
           value,
           transactionHash: signatureRequest.transactionHash,
           bridgeAddress: foreignBridgeAddress,
@@ -101,12 +106,12 @@ function processSignatureRequestsBuilder(config) {
           }
         }
 
-        const data = await homeBridge.methods
+        const txData = await homeBridge.methods
           .submitSignature(signature.signature, message)
           .encodeABI({ from: config.validatorAddress })
 
         txToSend.push({
-          data,
+          data: txData,
           gasEstimate,
           transactionReference: signatureRequest.transactionHash,
           to: homeBridgeAddress

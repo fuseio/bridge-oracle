@@ -43,7 +43,7 @@ function processTransfersBuilder(config) {
         logger.info({ from, value, data }, `Processing transfer ${transfer.transactionHash}`)
 
         let recipient
-        if (data && web3Home.utils.isAddress(data)) {
+        if (data && web3Foreign.utils.isAddress(data)) {
           recipient = data
         } else {
           const receipt = await web3Foreign.eth.getTransactionReceipt(transfer.transactionHash)
