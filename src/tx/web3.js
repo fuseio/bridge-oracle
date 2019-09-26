@@ -54,7 +54,7 @@ async function getEvents({ contract, event, fromBlock, toBlock, filter }) {
   try {
     const contractAddress = contract.options.address
     logger.info(
-      { contractAddress, event, fromBlock: fromBlock.toString(), toBlock: toBlock.toString() },
+      { contractAddress, event, fromBlock: fromBlock.toString(), toBlock: toBlock.toString(), filter },
       'Getting past events'
     )
     const pastEvents = await contract.getPastEvents(event, { fromBlock, toBlock, filter })
